@@ -1,0 +1,256 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>To-do List</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">    
+    <link href="Content/bootstrap.css" rel="stylesheet" />
+
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .container {
+            width: 700px;
+            margin: 30px auto;
+            padding: 20px;            
+           
+        }
+
+        h1 {
+            color: #1F6866;            
+            font-size: 40px;
+            text-align: center;
+            padding: 5px;
+        }
+
+        h2 {
+            padding: 5px;
+            font-size: 20px;
+        }
+
+        .add {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            margin-bottom: 16px;
+        }
+
+        .myInput {
+            width: 600px;
+            border: 3px solid #524c4c;
+            padding: 5px 10px;
+            font-size: 18px;
+            border-radius: 5px;
+        }
+        .addBtn {
+            border: 3px solid;
+            cursor: pointer;
+            padding: 3px;
+            border: 3px solid #524c4c;
+            border-radius: 5px;
+        }
+
+        .todoList,
+        .doneList {
+            border: 3px solid #524c4c;
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 16px;
+        }
+
+        .addItem,
+        .todoListitem,
+        .doneListitem {
+            padding: 5px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 5px;
+        }
+
+        .todoListitemtext,
+        .doneListitemtext {
+            width: 80%;
+            word-break: break-all;
+            padding-left: 10px;
+            font-size: 18px;
+        }
+
+        .todoListitemtextInput {
+            width: 100%;
+            border: none;
+            background-color: inherit;
+            font-size: 18px;
+            border: 2px solid #EDD29F;
+            padding: 2px;
+        }
+
+        .todoListitemIcons,
+        .doneListitemIcons {
+            display: flex;
+        }
+
+        .todoListitemIcons_Modify,
+        .todoListitemIcons_Trash,
+        .todoListitemIcons_DoneList,
+        .doneListitemIcons_Trash,
+        .doneListitemIcons_DoneList {
+            margin: 0 5px;
+        }
+
+        i {
+            display: block;
+            font-size: 23px;
+            color: #206766;
+        }
+
+            i:hover {
+                opacity: 0.7;
+            }
+    </style>
+</head>
+<body>
+    <div class="container justify-content-center">
+        <h1>To-Do List</h1>
+
+        <div class="add">
+            <input class="myInput" type="text" placeholder="請輸入待辦項目">
+            <div class="addBtn">Add</div>
+        </div>
+        <div class="row mt-2">            
+                <div class="todoList col-6">
+                    <h2 style="text-decoration:underline">Todo List</h2>
+                </div>
+
+                <div class="doneList col-6">
+                    <h2 style="text-decoration:underline">Done List</h2>
+                </div>
+            </div>
+    </div>
+
+
+
+            <script>
+                //抓取元素
+                var addInput = document.getElementsByClassName('myInput')[0];
+                var addEvent = document.getElementsByClassName('addBtn')[0];
+                var todoList = document.getElementsByClassName('todoList')[0];
+                var doneList = document.getElementsByClassName('doneList')[0];
+                var controlModify = true;
+
+                //初始項目
+                addtodoListitem("項目一")
+                addtodoListitem("項目二")
+                adddoneListItem("項目三")
+
+
+                addEvent.onclick = function () {
+                    var addcontent = addInput.value.trim();
+                    if (addcontent == "") {
+                        alert("尚未輸入項目");
+                    } else {
+                        addtodoListitem(addcontent);
+                        addInput.value = "";
+                    }
+                };
+
+                function addtodoListitem(content) {
+                    var todoListItem = document.createElement("div");
+                    var todoListItemText = document.createElement("div");
+                    var todoListItemIcons = document.createElement("div");
+                    var todoListItemIconsModify = document.createElement("div");
+                    var todoListItemIconsTrash = document.createElement("div");
+                    var todoListItemIconsdoneList = document.createElement("div");
+                    //加入class
+                    todoListItem.className = "todoListitem";
+                    todoListItemText.className = "todoListitemtext";
+                    todoListItemIcons.className = "todoListitemIcons";
+                    todoListItemIconsModify.className = "todoListitemIcons_Modify";
+                    todoListItemIconsTrash.className = "todoListitemIcons_Trash";
+                    todoListItemIconsdoneList.className = "todoListitemIcons_DoneList";
+                    //加入待辦事項內容
+                    todoListItemText.innerHTML = content;
+                    //加入icon
+                    todoListItemIconsModify.innerHTML = "<i class=" + '"bi bi-pencil-square"' + "></i>";
+                    todoListItemIconsTrash.innerHTML = "<i class=" + '" bi bi-trash3"' + "></i>";
+                    todoListItemIconsdoneList.innerHTML = "<i class=" + '"bi bi-check2-square"' + "></i>";
+                    //加入元素，形成父子關係
+                    todoListItemIcons.appendChild(todoListItemIconsModify);
+                    todoListItemIcons.appendChild(todoListItemIconsTrash);
+                    todoListItemIcons.appendChild(todoListItemIconsdoneList);
+                    todoListItem.appendChild(todoListItemText);
+                    todoListItem.appendChild(todoListItemIcons);
+                    //加入到頁面上
+                    todoList.appendChild(todoListItem);
+                    //加入修改方法
+                    todoListItemIconsModify.onclick = function (ev) {
+                        if (controlModify == true) {
+                            controlModify = false;
+                            var todoListItemBefore = todoListItemText.innerHTML;
+                            todoListItemText.innerHTML = "<input class=" + '"todoListitemtextInput"' + 'type="text">';
+                            var todoListItemTextInput = document.getElementsByClassName('todoListitemtextInput')[0];
+                            todoListItemTextInput.value = todoListItemBefore;
+                            todoListItemTextInput.focus();
+                            ev = window.event || ev;
+                            ev.stopPropagation ? ev.stopPropagation() : ev.cancelBubble = true;
+                            document.onclick = function () {
+                                todoListItemText.innerHTML = todoListItemTextInput.value;
+                                controlModify = true;
+                            }
+                        }
+                    }
+                    //加入刪除方法
+                    todoListItemIconsTrash.onclick = function () {
+                        todoListItem.parentNode.removeChild(todoListItem);
+                    }
+                    //加入完成方法
+                    todoListItemIconsdoneList.onclick = function () {
+                        if (controlModify == true) {
+                            adddoneListItem(todoListItemText.innerHTML);
+                            todoListItem.parentNode.removeChild(todoListItem);
+                        }
+                    }
+                }
+
+                function adddoneListItem(doneListContent) {
+                    var doneListItem = document.createElement("div");
+                    var doneListItemText = document.createElement("div");
+                    var doneListItemIcons = document.createElement("div");
+                    var doneListItemIconsTrash = document.createElement("div");
+                    var doneListItemIconsdoneList = document.createElement("div");
+                    //加入class
+                    doneListItem.className = "doneListitem";
+                    doneListItemText.className = "doneListitemtext";
+                    doneListItemIcons.className = "doneListitemIcons";
+                    doneListItemIconsTrash.className = "doneListitemIcons_Trash";
+                    doneListItemIconsdoneList.className = "doneListitemIcons_DoneList";
+                    //加入完成事項內容
+                    doneListItemText.innerHTML = doneListContent;
+                    //加入icon
+                    doneListItemIconsTrash.innerHTML = "<i class=" + '" bi bi-trash3"' + "></i>";
+                    doneListItemIconsdoneList.innerHTML = "<i class=" + '"bi bi-check2-square"' + "></i>";
+                    //加入元素，形成父子關係
+                    doneListItemIcons.appendChild(doneListItemIconsTrash);
+                    doneListItemIcons.appendChild(doneListItemIconsdoneList);
+                    doneListItem.appendChild(doneListItemText);
+                    doneListItem.appendChild(doneListItemIcons);
+                    //加入到頁面上
+                    doneList.appendChild(doneListItem);
+                    //加入刪除方法
+                    doneListItemIconsTrash.onclick = function () {
+                        doneListItem.parentNode.removeChild(doneListItem);
+                    }
+                    // 加入未完成方法
+                    doneListItemIconsdoneList.onclick = function () {
+                        addtodoListitem(doneListItemText.innerHTML);
+                        doneListItem.parentNode.removeChild(doneListItem);
+                    }
+                }
+            </script>
+</body>
+</html>
